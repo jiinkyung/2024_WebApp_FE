@@ -1,7 +1,8 @@
 import './App.css';
 import Todo from './Todo';
 import React, { useState } from "react";
-
+import { Container, List, Paper } from "@mui/material";
+import AddTodo from './AddTodo';
 
 function App() {
   const[items, setItems] = useState([
@@ -20,19 +21,33 @@ function App() {
     }]
   );
 
+  const addItem = (item) => {
+    item.id = "ID-" + items.length;
+    item.done = false;
+    setItems([...items, item]); // items 배열에 item 원소 추가
+    console.log("items: ", items);
+  }
+
   // JSX 결과를 변수에 저장
-  let todoItems =
-    items.length > 0 &&
-    items.map((item) => <Todo item={item} key={item.id} />);
-
-  return(
+  let todoItems =items.length > 0 && (
+    <Paper style={{ margin: 16 }}>
+      <List>
+        {items.map((item) => (
+          <Todo item={item} key={item.id} />
+        ))}
+      </List>
+    </Paper>
+  );
+  return (
     <div className='App'>
-     {/* <Todo item={item[0]}/>
-      <Todo item={item[1]}/> */}
-      {todoItems}
-
+      <Container maxWidth="md">
+        <AddTodo />
+        <div className='App'>
+          {todoItems}
+        </div>
+      </Container>
     </div>
-  )
+  );
 }
 
 export default App;

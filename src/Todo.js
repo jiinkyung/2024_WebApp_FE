@@ -18,16 +18,17 @@ const Todo = (props) => {
     
     const editEventHandler = (e) => {
         item.title = e.target.value;
-        editItem();
-    }
+        setItem({...item, title: e.target.value});
+    };
 
     const turnOffReadOnly = () => {
         setReadOnly(false);
     }
 
     const turnOnReadOnly = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && readOnly === false) {
             setReadOnly(true);
+            editItem(item);
         }
     }
 

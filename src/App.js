@@ -3,39 +3,27 @@ import Todo from './Todo';
 import React, { useState, useEffect } from "react";
 import { Container, List, Paper } from "@mui/material";
 import AddTodo from './AddTodo';
+import { call } from './service/ApiService';
+
 
 function App() {
   const[items, setItems] = useState([]);
 
   useEffect(() => {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type":"application/json"},
-    };
 
-    fetch("http://localhost:8080/todo", requestOptions)
-    .then((response) => response.json())
-    .then(
-      (response) => {
-        setItems(response.data);
-      },
-      (error) => {}
-    ); 
-  }, [])
+    call("/todo", "GET", null)
+      .then((response) => setItems(response.data));
+    }, []);
+
 
   const addItem = (item) => {
-    item.id = "ID-" + items.length;
-    item.done = false;
-    setItems([...items, item]); // items 배열에 item 원소 추가 => 리렌더링
-    console.log("items: ", items);
-  }
+    call("/todo", "POST", item)
+      .then((response) => setItems(response.data));
+  };
 
   const deleteItem = (item) => {
-    // 삭제할 아이템을 찾는다.
-    const newItems = items.filter(e => e.id !== item.id);
-
-    // 삭제할 아이템을 제외한 아이템을 다시 배열에 저장한다.
-    setItems([...newItems]);
+    call("/todo", "DELETE", item)
+      .then((response) => setItems(response.data));
   }
 
   const editItem = () => {
@@ -52,6 +40,7 @@ function App() {
       </List>
     </Paper>
   );
+
   return (
     <div className='App'>
       <Container maxWidth="md">

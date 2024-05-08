@@ -26,8 +26,9 @@ function App() {
       .then((response) => setItems(response.data));
   }
 
-  const editItem = () => {
-    setItems([...items]);
+  const editItem = (item) => {
+    call("/todo", "PUT", item)
+      .then((response) => setItems(response.data));
   };
 
   // JSX 결과를 변수에 저장
